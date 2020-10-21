@@ -5,8 +5,8 @@ import logging
 
 from requests_oauthlib import OAuth2Session
 
-import oauth_settings
-from openid import (
+from . import oauth_settings
+from .openid import (
     jwt_token_noverify,
     jwt_token_verify,
     openid_connect_urls,
@@ -104,7 +104,7 @@ class OauthProvider(object):
     def _expand_template(self, name, args):
         template = self.get('user.{}'.format(name))
         # Replace None with ''
-        args = dict((k, v if v is not None else '') for k, v in args.items())
+        args = dict((k, v if v is not None else '') for k, v in list(args.items()))
         return template.format(**args)
 
     def _expand_all(self, args):

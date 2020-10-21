@@ -31,8 +31,8 @@ from omeroweb.webclient.webclient_gateway import OmeroWebGateway
 from omeroweb.webclient.views import WebclientLoginView
 from omeroweb.webadmin.webadmin_utils import upgradeCheck
 
-import oauth_settings
-from providers import (
+from . import oauth_settings
+from .providers import (
     OauthProvider,
     providers,
 )

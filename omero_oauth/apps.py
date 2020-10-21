@@ -20,7 +20,7 @@
 
 
 from django.apps import AppConfig
-import oauth_settings  # noqa
+from . import oauth_settings  # noqa
 
 
 class WebOAuthAppConfig(AppConfig):
