@@ -11,7 +11,6 @@ from django.http import (
     HttpResponseRedirect,
 )
 from django.template import loader as template_loader
-from django.template import RequestContext as Context
 from django.core.exceptions import PermissionDenied
 
 import omero
@@ -52,13 +51,13 @@ class OauthLoginView(WebclientLoginView):
             'build_year': build_year,
             'auth_providers': auth_providers,
             'client_name': oauth_settings.OAUTH_DISPLAY_NAME,
+            'url_suffix': ''
         }
         if hasattr(settings, 'LOGIN_LOGO'):
             context['LOGIN_LOGO'] = settings.LOGIN_LOGO
 
         t = template_loader.get_template('oauth/index.html')
-        c = Context(request, context)
-        rsp = t.render(c)
+        rsp = t.render(context, request=request)
         return HttpResponse(rsp)
 
     def post(self, request):
@@ -222,10 +221,10 @@ def confirm(request, **kwargs):
         'username': conn.getUser().getName(),
         'email_missing': not email or not email.strip(),
         'sessiontoken_enabled': oauth_settings.OAUTH_SESSIONTOKEN_ENABLE,
+        'url_suffix': ''
     }
     t = template_loader.get_template('oauth/confirm.html')
-    c = Context(request, context)
-    rsp = t.render(c)
+    rsp = t.render(context, request=request)
     return HttpResponse(rsp)
 
 
@@ -243,6 +242,7 @@ def sessiontoken(request, **kwargs):
     context = {
         'client_name': oauth_settings.OAUTH_DISPLAY_NAME,
         'sessiontoken_enabled': oauth_settings.OAUTH_SESSIONTOKEN_ENABLE,
+        'url_suffix': ''
     }
     if oauth_settings.OAUTH_SESSIONTOKEN_ENABLE:
         adminc = create_admin_conn()
@@ -253,6 +253,5 @@ def sessiontoken(request, **kwargs):
             adminc.close()
         context['new_session'] = new_session
     t = template_loader.get_template('oauth/sessiontoken.html')
-    c = Context(request, context)
-    rsp = t.render(c)
+    rsp = t.render(context, request=request)
     return HttpResponse(rsp)

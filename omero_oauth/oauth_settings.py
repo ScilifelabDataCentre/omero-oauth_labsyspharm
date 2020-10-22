@@ -45,11 +45,11 @@ def oauth_provider_config(o):
         cfgfile = o
         with open(cfgfile) as f:
             if cfgfile.endswith('.yml') or cfgfile.endswith('.yaml'):
-                cfg = yaml.load(f)
+                cfg = yaml.load(f, Loader=yaml.FullLoader)
             else:
-                cfg = json.load(f)
+                cfg = json.load(f, Loader=yaml.FullLoader)
     schemastr = get_data('omero_oauth', 'schema/provider-schema.yaml')
-    schema = yaml.load(schemastr)
+    schema = yaml.load(schemastr, Loader=yaml.FullLoader)
     v = Draft7Validator(schema)
     if not v.is_valid(cfg):
         errs = '\n\n** '.join(
