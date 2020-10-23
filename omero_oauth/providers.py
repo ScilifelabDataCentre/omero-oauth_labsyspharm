@@ -126,6 +126,18 @@ class OauthProvider(object):
         logger.debug('Got raw userinfo %s', userinfo)
         return self._expand_all(userinfo)
 
+    def userinfo_synapse(self, token, userinfo_url):
+        decoded = jwt_token_noverify(token['id_token'])
+
+        try:
+            omename = decoded["user_name"]
+            email = decoded.get("email")
+            firstname = decoded.get("given_name", "")
+            lastname = decoded.get("family_name", "")
+        except Exception:
+            raise ValueError(decoded)
+        return omename, email, firstname, lastname
+
     def userinfo_github(self, token, userinfo_url):
         # Note userinfo_default() will work if the user's email is public
         # otherwise we need another API call:
