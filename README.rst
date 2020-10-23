@@ -4,6 +4,8 @@
 
 OMERO.oauth
 ===========
+This fork contains fixes for OMERO.web >= 5.7.1 and Python 3. Also there's included an example
+configuration for Synapse OpenID Connect. https://www.synapse.org/
 
 OMERO.web application to allow OAuth2 login to OMERO.
 

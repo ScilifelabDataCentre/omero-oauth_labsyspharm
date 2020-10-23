@@ -94,3 +94,33 @@ providers:
     user:
       # OMERO user name, template must contain {orcid}
       name: 'orcid-{orcid}'
+
+  ######################################################################
+  # Synapse
+  - name: synapse
+    displayname: Synapse
+    url:
+      callback: https://OMERO.WEB.HOST/oauth/callback/synapse
+
+    client:
+      id: CLIENT_ID
+      secret: SECRET_ID
+      scopes:
+        - openid
+
+    openid:
+      issuer: https://repo-prod.prod.sagebase.org/auth/v1
+
+    authorization:
+      params:
+        claims: "{\"id_token\": { \"user_name\": null, \"email\": null, \"given_name\": null, \"family_name\": null } }"
+
+    userinfo:
+      type: synapse
+
+    user:
+      # OMERO user name
+      name: '{user_name}'
+      email: '{email}'
+      firstname: '{given_name}'
+      lastname: '{family_name}'
