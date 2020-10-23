@@ -12,13 +12,13 @@ OMERO.web application to allow OAuth2 login to OMERO.
 This application works by using an OMERO administrative account to implement an alternative authentication method to the standard username and password.
 Ensure you review the code and understand the consequences before using this application.
 
-.. image:: ./docs/screenshot-login.png
+.. image:: ./docs/screenshot-synapse.png
 
 
 Requirements
 ------------
 
-* OMERO.web 5.4 or newer.
+* Tested with OMERO.web 5.7.1 and 5.8.1.
 
 
 Installation
