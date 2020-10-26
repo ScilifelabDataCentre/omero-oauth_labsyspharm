@@ -4,6 +4,7 @@
 import logging
 
 from requests_oauthlib import OAuth2Session
+from django.core.exceptions import PermissionDenied
 
 from . import oauth_settings
 from .openid import (
@@ -27,6 +28,9 @@ def providers():
             ps.append((cfg['name'], cfg['name']))
     return ps
 
+class OauthException(Exception):
+    def __init__(self, message):
+        self.message = message
 
 class OauthProvider(object):
 
@@ -129,13 +133,14 @@ class OauthProvider(object):
     def userinfo_synapse(self, token, userinfo_url):
         decoded = jwt_token_noverify(token['id_token'])
 
-        try:
-            omename = decoded["user_name"]
-            email = decoded.get("email")
-            firstname = decoded.get("given_name", "")
-            lastname = decoded.get("family_name", "")
-        except Exception:
-            raise ValueError(decoded)
+        omename = decoded["user_name"]
+        email = decoded.get("email")
+        firstname = decoded.get("given_name", "")
+        lastname = decoded.get("family_name", "")
+        team = decoded.get("team")
+        if len(team) == 0:
+            raise OauthException('Required team not found, request membership from your Synapse team manager.')
+
         return omename, email, firstname, lastname
 
     def userinfo_github(self, token, userinfo_url):
