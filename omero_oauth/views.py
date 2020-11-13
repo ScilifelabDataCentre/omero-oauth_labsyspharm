@@ -15,7 +15,7 @@ from django.core.exceptions import PermissionDenied
 
 import omero
 from omero.rtypes import unwrap
-from omeroweb.decorators import get_client_ip
+from omeroweb.decorators import get_client_ip, parse_url
 from omeroweb.webclient.decorators import (
     login_required,
     render_response,
@@ -229,12 +229,17 @@ def error(request, **kwargs):
 def confirm(request, **kwargs):
     conn = kwargs['conn']
     email = conn.getUser().getEmail()
+    try:
+        url = parse_url(settings.LOGIN_REDIRECT)
+    except Exception:
+        url = reverse("webindex")
     context = {
         'client_name': oauth_settings.OAUTH_DISPLAY_NAME,
         'username': conn.getUser().getName(),
         'email_missing': not email or not email.strip(),
         'sessiontoken_enabled': oauth_settings.OAUTH_SESSIONTOKEN_ENABLE,
-        'url_suffix': ''
+        'url_suffix': '',
+        'url': url,
     }
     t = template_loader.get_template('oauth/confirm.html')
     rsp = t.render(context, request=request)
