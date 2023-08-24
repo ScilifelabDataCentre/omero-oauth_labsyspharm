@@ -5,7 +5,7 @@ import logging
 from datetime import datetime
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import (
     HttpResponse,
     HttpResponseRedirect,
@@ -102,7 +102,7 @@ class OauthCallbackView(WebclientLoginView):
 
     def login_with_session(self, request, session):
         # Based on
-        # https://github.com/openmicroscopy/openmicroscopy/blob/v5.4.10/components/tools/OmeroWeb/omeroweb/webgateway/views.py#L2943
+        # https://github.com/ome/omero-web/blob/v5.22.1/omeroweb/webgateway/views.py#3421 (LoginView.post)
         username = session
         password = session
         server_id = 1
@@ -118,7 +118,7 @@ class OauthCallbackView(WebclientLoginView):
                 userip=get_client_ip(request))
             if conn is not None:
                 try:
-                    request.session['connector'] = connector
+                    connector.to_session(request)
                     # UpgradeCheck URL should be loaded from the server or
                     # loaded omero.web.upgrades.url allows to customize web
                     # only
@@ -226,8 +226,7 @@ def error(request, **kwargs):
 
 @login_required()
 @render_response()
-def confirm(request, **kwargs):
-    conn = kwargs['conn']
+def confirm(request, conn=None, **kwargs):
     email = conn.getUser().getEmail()
     try:
         url = parse_url(settings.LOGIN_REDIRECT)
@@ -248,8 +247,7 @@ def confirm(request, **kwargs):
 
 @login_required()
 @render_response()
-def sessiontoken(request, **kwargs):
-    conn = kwargs['conn']
+def sessiontoken(request, conn=None, **kwargs):
     # createUserSession fails with a SecurityViolation
     # create session using sudo instead
     # ss = conn.c.getSession().getSessionService()
