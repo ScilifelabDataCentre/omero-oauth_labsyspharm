@@ -4,8 +4,8 @@
 
 OMERO.oauth
 ===========
-This fork contains fixes for OMERO.web >= 5.7.1 and Python 3. Also there's included an example
-configuration for Synapse OpenID Connect. https://www.synapse.org/
+This fork contains fixes for OMERO.web >= 5.18, Django 3.2, and Python 3. Also there's
+an example configuration for Synapse OpenID Connect. https://www.synapse.org/
 
 OMERO.web application to allow OAuth2 login to OMERO.
 
@@ -18,7 +18,7 @@ Ensure you review the code and understand the consequences before using this app
 Requirements
 ------------
 
-* Tested with OMERO.web 5.7.1 and 5.8.1.
+* Tested with OMERO.web 5.22.1 and Django 3.2, but OMERO.web as low as 5.18 should work.
 
 
 Installation
@@ -30,17 +30,6 @@ This section assumes that an OMERO.web is already installed.
 
     $ python setup.py install
     $ omero config append omero.web.apps '"omero_oauth"'
-
-OMERO.web 5.4.* contains a bug that prevents login using this app.
-You will need to apply `the patch omeroweb-5.4.10-webgateway-marshal-py.patch <omeroweb-5.4.10-webgateway-marshal-py.patch>`_ to your copy of OMERO.web:
-
-::
-
-    $ cd OMERO.py-5.4.10-ice36-b105
-    $ patch -p1 < ../omeroweb-5.4.10-webgateway-marshal-py.patch
-
-This bug is fixed in 5.5.0: https://github.com/openmicroscopy/openmicroscopy/pull/5890
-
 
 Configuration settings:
 
