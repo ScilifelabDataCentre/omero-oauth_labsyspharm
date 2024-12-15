@@ -2,6 +2,16 @@
     :target: https://travis-ci.com/manics/omero-oauth
 
 
+Installing in our omero instance
+--------------------------------
+1. In VM, go to omero-web docker as root and clothe the repository in ``/opt/omero/``
+2. Still in ``/opt/omero/`` activate omero CLI source ``/opt/omero/web/venv3/bin/activate``
+3. Install omero-oauth ``python /opt/omero/omero-oauth/setup.py install``
+4. Exit as root and load in docker as user
+5. Activate omero CLI
+6. Run ``omero config append omero.web.apps '"omero_oauth"'```
+7. Finally, run ``omero web restart``
+
 OMERO.oauth
 ===========
 This fork contains fixes for OMERO.web >= 5.18, Django 3.2, and Python 3. Also there's

@@ -73,58 +73,58 @@ providers:
 
   ######################################################################
   # ORCID
-  - name: orcid
-    displayname: ORCID
-    url:
-      authorisation: https://orcid.org/oauth/authorize
-      token: https://orcid.org/oauth/token
-      userinfo: https://pub.orcid.org/v2.1/{orcid}
-      callback: https://OMERO.WEB.HOST/oauth/callback/orcid
+  # - name: orcid
+  #   displayname: ORCID
+  #   url:
+  #     authorisation: https://orcid.org/oauth/authorize
+  #     token: https://orcid.org/oauth/token
+  #     userinfo: https://pub.orcid.org/v2.1/{orcid}
+  #     callback: https://OMERO.WEB.HOST/oauth/callback/orcid
 
-    # https://support.orcid.org/hc/en-us/articles/360006897174
-    client:
-      id: CLIENT_ID
-      secret: SECRET_ID
-      scopes:
-        - /authenticate
+  #   # https://support.orcid.org/hc/en-us/articles/360006897174
+  #   client:
+  #     id: CLIENT_ID
+  #     secret: SECRET_ID
+  #     scopes:
+  #       - /authenticate
 
-    userinfo:
-      type: orcid
+  #   userinfo:
+  #     type: orcid
 
-    user:
-      # OMERO user name, template must contain {orcid}
-      name: 'orcid-{orcid}'
+    # user:
+    #   # OMERO user name, template must contain {orcid}
+    #   name: 'orcid-{orcid}'
 
   ######################################################################
   # Synapse
   # https://docs.synapse.org/articles/using_synapse_as_an_oauth_server.html
-  - name: synapse
-    displayname: Synapse
-    url:
-      callback: https://OMERO.WEB.HOST/oauth/callback/synapse
+  # - name: synapse
+  #   displayname: Synapse
+  #   url:
+  #     callback: https://OMERO.WEB.HOST/oauth/callback/synapse
 
-    client:
-      id: CLIENT_ID
-      secret: SECRET_ID
-      # only allowed scope for synapse is openid
-      scopes:
-        - openid
+  #   client:
+  #     id: CLIENT_ID
+  #     secret: SECRET_ID
+  #     # only allowed scope for synapse is openid
+  #     scopes:
+  #       - openid
 
-    openid:
-      issuer: https://repo-prod.prod.sagebase.org/auth/v1
+  #   openid:
+  #     issuer: https://repo-prod.prod.sagebase.org/auth/v1
 
-    authorization:
-      params:
-        # Only the specified teams are allowed to log in
-        claims: "{\"id_token\": { \"user_name\": null, \"email\": null, \"given_name\": null, \"family_name\": null, \"team\": {\"values\": [\"3410871\"] } } }"
+  #   authorization:
+  #     params:
+  #       # Only the specified teams are allowed to log in
+  #       claims: "{\"id_token\": { \"user_name\": null, \"email\": null, \"given_name\": null, \"family_name\": null, \"team\": {\"values\": [\"3410871\"] } } }"
 
-    userinfo:
-      type: synapse
+  #   userinfo:
+  #     type: synapse
 
-    user:
-      # OMERO user name
-      # TODO changing the template values below doesn't have effect right now
-      name: '{user_name}'
-      email: '{email}'
-      firstname: '{given_name}'
-      lastname: '{family_name}'
+  #   user:
+  #     # OMERO user name
+  #     # TODO changing the template values below doesn't have effect right now
+  #     name: '{user_name}'
+  #     email: '{email}'
+  #     firstname: '{given_name}'
+  #     lastname: '{family_name}'

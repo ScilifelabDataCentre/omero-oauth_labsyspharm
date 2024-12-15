@@ -1,4 +1,4 @@
-config set omero.web.oauth.host localhost
+config set omero.web.oauth.host omeroserver
 config set omero.web.oauth.admin.user root
 config set omero.web.oauth.admin.password omero
 
