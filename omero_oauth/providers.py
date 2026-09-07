@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import logging
+import secrets
 from typing import Any, Dict, List, Optional, Tuple, cast
 
 from django.core.exceptions import PermissionDenied
@@ -47,6 +48,7 @@ class OauthProvider(object):
         if not cfg:
             raise ValueError("No configuration found for: {}".format(name))
         self.cfg = cfg
+        self.nonce: Optional[str] = None
         self._get_urls()
         self.oauth = OAuth2Session(
             self.get("client.id"),
@@ -93,8 +95,12 @@ class OauthProvider(object):
                 self.set("url.userinfo", userinfo_oid)
 
     def authorization(self) -> Tuple[str, str]:
+        params = dict(self.get("authorization.params", {}) or {})
+        if "openid" in (self.get("client.scopes") or []):
+            params.setdefault("nonce", secrets.token_urlsafe(32))
+        self.nonce = params.get("nonce")
         authorization_url, state = self.oauth.authorization_url(
-            self.get("url.authorisation"), **self.get("authorization.params", {})
+            self.get("url.authorisation"), **params
         )
         return authorization_url, state
 
@@ -119,7 +125,13 @@ class OauthProvider(object):
         lastname = self._expand_template("lastname", args)
         return omename, email, firstname, lastname
 
-    def get_userinfo(self, token: Dict[str, Any]) -> Tuple[str, Optional[str], str, str]:
+    def get_userinfo(
+        self, token: Dict[str, Any], expected_nonce: Optional[str] = None
+    ) -> Tuple[str, Optional[str], str, str]:
+        if expected_nonce is not None and "id_token" in token:
+            decoded = jwt_token_noverify(token["id_token"])
+            if decoded.get("nonce") != expected_nonce:
+                raise OauthException("OpenID nonce mismatch")
         userinfo_type = self.get("userinfo.type", "default")
         f = getattr(self, "userinfo_{}".format(userinfo_type))
         userinfo_url = self.get("url.userinfo")

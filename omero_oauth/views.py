@@ -59,13 +59,23 @@ class OauthLoginView(WebclientLoginView):  # type: ignore[misc]
         authorization_url, state = oauth.authorization()
         # state: used for CSRF protection
         request.session["oauth_state"] = state
+        # nonce: binds the id_token to this login request
+        request.session["oauth_nonce"] = oauth.nonce
         logger.debug("OAuth provider: %s", name)
         return HttpResponseRedirect(authorization_url)
 
 
 class OauthCallbackView(WebclientLoginView):  # type: ignore[misc]
     def get(self, request: HttpRequest, name: str) -> HttpResponse:
-        state = request.session.pop("oauth_state")
+        state = request.session.pop("oauth_state", None)
+        nonce = request.session.pop("oauth_nonce", None)
+        if request.GET.get("error"):
+            return error(
+                request,
+                error_message="{}: {}".format(
+                    request.GET["error"], request.GET.get("error_description", "")
+                ),
+            )
         if not state:
             raise PermissionDenied("OAuth state missing")
         code = request.GET.get("code")
@@ -77,7 +87,7 @@ class OauthCallbackView(WebclientLoginView):  # type: ignore[misc]
             token = oauth.token(code)
             logger.debug("Got OAuth token %s", token)
 
-            userinfo = oauth.get_userinfo(token)
+            userinfo = oauth.get_userinfo(token, expected_nonce=nonce)
             logger.debug("Got userinfo %s", userinfo)
 
             uid, session = self.get_or_create_account_and_session(userinfo)
