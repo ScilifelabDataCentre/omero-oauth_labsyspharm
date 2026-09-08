@@ -3,3 +3,4 @@
 build
 dist
 *TOKEN*
+.DS_Store
