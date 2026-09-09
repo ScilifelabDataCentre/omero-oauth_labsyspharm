@@ -95,10 +95,8 @@ SUPR block, placeholders to fill in:
 - `<SUPR_CLIENT_ID>`, `<SUPR_CLIENT_SECRET>`
 - `<OMERO_HOST>` in the callback `https://<OMERO_HOST>/oauth/callback/supr`
 
-The SUPR URLs and issuer in the template point at the test Disposer instance
-(`https://disposer.c3se.chalmers.se/supr-test`). Replace them with the production host unless you are
-deploying against the test environment. The block also requests the SUPR-specific
-`enabled-account-resource-60` scope in addition to `openid`, `profile`, and `email`.
+The SUPR URLs and issuer in the template point at the production instance
+(`https://supr.naiss.se`). The block also requests the SUPR-specific `enabled-account-resource-98` scope in addition to `openid`,`profile`, and `email`.
 
 Copy the provider config and load the OMERO config:
 
