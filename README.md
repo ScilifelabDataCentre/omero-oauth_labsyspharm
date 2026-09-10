@@ -2,9 +2,9 @@
 
 OMERO.web OAuth2 / OpenID Connect login uses an OMERO administrative account as a bridge instead of local passwords. Review the code and implications before deploying.
 
-![Screenshot of the OMERO.web login page with OAuth login buttons](./docs/screenshot-keycloak-supr.png)
+![Screenshot of the OMERO.web login page with OAuth login buttons](./docs/screenshot-supr.png)
 
-The login page shows one button per configured provider; the example above has two providers enabled.
+The login page shows one button per configured provider; the example above has one provider enabled (SUPR).
 
 ## Fork changes
 
