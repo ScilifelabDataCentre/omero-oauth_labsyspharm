@@ -2,9 +2,9 @@
 
 OMERO.web OAuth2 / OpenID Connect login uses an OMERO administrative account as a bridge instead of local passwords. Review the code and implications before deploying.
 
-![Screenshot of the OMERO.web login page with Keycloak enabled](./docs/screenshot-keycloak-supr.png)
+![Screenshot of the OMERO.web login page with OAuth login buttons](./docs/screenshot-keycloak-supr.png)
 
-The login page shows one button per configured provider; the example above has Keycloak and SUPR enabled.
+The login page shows one button per configured provider; the example above has two providers enabled.
 
 ## Fork changes
 
@@ -12,7 +12,7 @@ This is a fork of [OME OMERO.oauth](https://github.com/ome/omero-oauth). Relativ
 
 - OMERO.web >= 5.29, Django 4.2, and Python 3.9
 - Provider config as YAML ([schema](omero_oauth/schema/provider-schema.yaml))
-- Keycloak and SUPR providers (site-specific example in [`templates/oauth-providers.yaml`](templates/oauth-providers.yaml))
+- SUPR provider (site-specific example in [`templates/oauth-providers.yaml`](templates/oauth-providers.yaml))
 
 ## Requirements
 
@@ -81,14 +81,8 @@ The Dockerfile copies `templates/` into `/opt/omero/web/config/`. Modify the pro
 `templates/02-oauth-config.omero` sets `omero.web.oauth.providers` to
 `/opt/omero/web/config/oauth-providers.yaml`, so `templates/oauth-providers.yaml` is the file the image loads.
 
-The login page shows a button for every entry under `providers`. The template ships two OpenID Connect
-providers, Keycloak and SUPR; keep only the blocks you need and delete or comment out the rest.
-
-Keycloak block, placeholders to fill in:
-
-- `<KEYCLOAK_URL>`, `<REALM>` in the authorisation, token, userinfo, and `openid.issuer` URLs
-- `<KEYCLOAK_CLIENT_ID>`, `<KEYCLOAK_CLIENT_SECRET>`
-- `<OMERO_HOST>` in the callback `https://<OMERO_HOST>/oauth/callback/keycloak`
+The login page shows a button for every entry under `providers`. The template ships one OpenID Connect
+provider, SUPR; add further blocks under `providers` if you need more.
 
 SUPR block, placeholders to fill in:
 

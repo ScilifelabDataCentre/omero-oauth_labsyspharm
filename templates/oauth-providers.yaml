@@ -1,37 +1,6 @@
 ---
 providers:
   ######################################################################
-  # Keycloak
-  - name: keycloak
-    displayname: Keycloak
-    url:
-      authorisation: https://<KEYCLOAK_URL>/realms/<REALM>/protocol/openid-connect/auth
-      token: https://<KEYCLOAK_URL>/realms/<REALM>/protocol/openid-connect/token
-      userinfo: https://<KEYCLOAK_URL>/realms/<REALM>/protocol/openid-connect/userinfo
-      callback: https://<OMERO_HOST>/oauth/callback/keycloak
-
-    # Keycloak client configuration
-    client:
-      id: <KEYCLOAK_CLIENT_ID>
-      secret: <KEYCLOAK_CLIENT_SECRET>
-      scopes:
-        - openid
-        - profile
-        - email
-
-    openid:
-      issuer: https://<KEYCLOAK_URL>/realms/<REALM>
-
-    userinfo:
-      type: openid
-
-    user:
-      name: '{preferred_username}'
-      email: '{email}'
-      firstname: '{given_name}'
-      lastname: '{family_name}'
-
-  ######################################################################
   # SUPR
   - name: supr
     displayname: SUPR

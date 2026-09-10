@@ -145,25 +145,6 @@ class OauthProvider(object):
         logger.debug("Got raw userinfo %s", userinfo)
         return self._expand_all(userinfo)
 
-    def userinfo_keycloak(
-        self, token: Any, userinfo_url: str
-    ) -> Tuple[str, Optional[str], str, str]:
-        response = self.oauth.get(
-            userinfo_url, headers={"Authorization": f"Bearer {token}"}
-        )
-        if response.status_code != 200:
-            raise OauthException(
-                f"Failed to fetch userinfo: {response.status_code} {response.text}"
-            )
-        userinfo = response.json()
-        logger.debug("Got Keycloak userinfo %s", userinfo)
-        omename, email, firstname, lastname = self._expand_all(userinfo)
-        if not omename or not email:
-            raise OauthException(
-                "Required user name or email could not be determined from Keycloak userinfo."
-            )
-        return omename, email, firstname, lastname
-
     def userinfo_synapse(
         self, token: Dict[str, Any], userinfo_url: str
     ) -> Tuple[str, Optional[str], str, str]:
